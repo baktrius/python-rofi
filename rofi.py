@@ -443,8 +443,7 @@ class Rofi(object):
         returncode, stdout = self._run_blocking(args, input=optionstr)
 
         # Figure out which option was selected.
-        stdout = stdout.strip()
-        index = int(stdout) if stdout else -1
+        indexes = [int(x) if x else -1 for x in stdout.strip().splitlines()] 
 
         # And map the return code to a key.
         if returncode == 0:
@@ -459,7 +458,7 @@ class Rofi(object):
             self.exit_with_error("Unexpected rofi returncode {0:d}.".format(results.returncode))
 
         # And return.
-        return index, key
+        return indexes, key
 
 
     def generic_entry(self, prompt, validator=None, message=None, rofi_args=None, **kwargs):
