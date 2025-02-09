@@ -442,9 +442,6 @@ class Rofi(object):
         # Run the dialog.
         returncode, stdout = self._run_blocking(args, input=optionstr)
 
-        # Figure out which option was selected.
-        indexes = [int(x) if x else -1 for x in stdout.strip().splitlines()] 
-
         # And map the return code to a key.
         if returncode == 0:
             key = 0
@@ -455,7 +452,10 @@ class Rofi(object):
             if key in exit_keys:
                 raise SystemExit()
         else:
-            self.exit_with_error("Unexpected rofi returncode {0:d}.".format(results.returncode))
+            self.exit_with_error("Unexpected rofi returncode {0:d}.".format(returncode))
+
+        # Figure out which option was selected.
+        indexes = [int(x) if x else -1 for x in stdout.strip().splitlines()] 
 
         # And return.
         return indexes, key
